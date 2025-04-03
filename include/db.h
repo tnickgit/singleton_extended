@@ -18,7 +18,7 @@ private:
 	time_t last_activity;
 	static const int TIMEOUT{ 5 };
 
-	Database(const string DB, const string UN, const string PW) :
+	Database(string DB, string UN, string PW) :
 		db{ DB }, username{ UN }, password{ PW }, last_activity{ std::time(nullptr) }
 	{}
 
@@ -31,11 +31,11 @@ private:
 		}
 	}
 
-	Database(const Database& src) {
+	Database(Database& src) {
 		throw std::runtime_error("Cannot have copy constructor");
 	}
 
-	Database& operator=(const Database& src) {
+	Database& operator=(Database& src) {
 		throw std::runtime_error("Cannot have a copy assignment constructor");
 	}
 
@@ -106,5 +106,8 @@ public:
 	// Updates the last_activity timestamp to the current time
 	// Should be called whenever there is interaction with the database to reset the timeout
 	void refreshConnection();
+
+	//Implement a timeout of 5 seconds. Connection to be disconnected after inactivity of 5 seconds.
+	void inactivityDisconnect();
 
 };
