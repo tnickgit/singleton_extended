@@ -29,7 +29,6 @@ public:
 	{
 		if (isConnected())
 		{
-			cout << "Disconnect connection" << endl;
 			connected = "false";
 		}
 	}

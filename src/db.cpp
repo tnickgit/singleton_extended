@@ -13,7 +13,6 @@ void Database::connect()
 
 void Database::disconnect()
 {
-    std::cout << "Disconnect connection" << std::endl;  // Add this to track
     connected = "false";
 }
 
