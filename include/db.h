@@ -31,6 +31,8 @@ private:
 		}
 	}
 
+public:
+
 	Database(Database& src) {
 		throw std::runtime_error("Cannot have copy constructor");
 	}
@@ -46,8 +48,6 @@ private:
 	Database& operator=(Database&& src) {
 		throw std::runtime_error("Cannot have a move assignment operator");
 	}
-
-public:
 
 	//"getInstance" that creates and returns the instance of the database. 
 	// If called first time it sets the username and password. 
