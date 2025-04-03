@@ -61,3 +61,21 @@ void Database::resetInstance() {
         instance = nullptr;
     }
 }
+
+bool Database::isTimeout()
+{
+    return (std::time(nullptr) - last_activity) > TIMEOUT;
+}
+
+void Database::refreshConnection()
+{
+    this->last_activity = std::time(nullptr);
+}
+
+void Database::inactivityDisconnect() 
+{
+    if (isTimeout())
+    {
+        disconnect();
+    }
+}

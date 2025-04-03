@@ -1,22 +1,25 @@
-//db.h
+﻿//db.h
 #pragma once
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <new>
+#include <ctime> 
 
 using namespace std;
 
-class Database{
+class Database {
 private:
 	string db;
 	string username;
 	string password;
 	string connected = "false";
 	static Database* instance;
-	
+	time_t last_activity;
+	static const int TIMEOUT{ 5 };
+
 	Database(const string DB, const string UN, const string PW) :
-		db{ DB }, username{ UN }, password{ PW }
+		db{ DB }, username{ UN }, password{ PW }, last_activity{ std::time(nullptr) }
 	{}
 
 	~Database()
@@ -26,6 +29,22 @@ private:
 			cout << "Disconnect connection" << endl;
 			connected = "false";
 		}
+	}
+
+	Database(const Database& src) {
+		throw std::runtime_error("Cannot have copy constructor");
+	}
+
+	Database& operator=(const Database& src) {
+		throw std::runtime_error("Cannot have a copy assignment constructor");
+	}
+
+	Database(Database&& src) {
+		throw std::runtime_error("Cannot have a move constructor");
+	}
+
+	Database& operator=(Database&& src) {
+		throw std::runtime_error("Cannot have a move assignment operator");
 	}
 
 public:
@@ -64,7 +83,7 @@ public:
 	// (cout is okay in this case). std::cout << "overloaded new ";
 	//If the memory allocation fails it should throw std::bad_alloc()
 	void* operator new(size_t size);
-
+	
 	//overload the delete operator that deallocates memory and prints 
 	// "overloaded delete " (cout is okay in this). std::cout << "overloaded delete ";
 	void operator delete(void* ptr);
@@ -79,4 +98,13 @@ public:
 
 	//The static "resetInstance" as defined below.
 	static void resetInstance();
+
+	// Checks if the connection has been inactive for longer than TIMEOUT seconds
+	// Returns true if the timeout threshold has been exceeded, false otherwise
+	bool isTimeout();
+
+	// Updates the last_activity timestamp to the current time
+	// Should be called whenever there is interaction with the database to reset the timeout
+	void refreshConnection();
+
 };
