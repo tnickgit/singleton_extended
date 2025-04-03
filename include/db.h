@@ -18,6 +18,9 @@ private:
 	time_t last_activity;
 	static const int TIMEOUT{ 5 };
 
+
+public:
+
 	Database(string DB, string UN, string PW) :
 		db{ DB }, username{ UN }, password{ PW }, last_activity{ std::time(nullptr) }
 	{}
@@ -30,8 +33,6 @@ private:
 			connected = "false";
 		}
 	}
-
-public:
 
 	Database(Database& src) {
 		throw std::runtime_error("Cannot have copy constructor");
